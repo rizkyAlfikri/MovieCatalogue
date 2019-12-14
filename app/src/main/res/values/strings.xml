@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">MovieCatalogue</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="tab_text_1">Home</string>
+    <string name="tab_text_2">Dashboard</string>
+    <string name="tab_text_3">Notification</string>
+
+    <string name="title_activity_movie_detail">MovieDetailActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="play_trailer">Play Trailer</string>
+    <string name="add_to_favorite">ADD TO FAVORITE</string>
+
+    <string name="tab_info">Info</string>
+    <string name="tab_review">Review</string>
+    <string name="tab_cast">Cast</string>
+    <string name="tab_photo">Image</string>
+    <string name="synopsis">Synopsis</string>
+
+    <string name="overview">High schoolers Mitsuha and Taki are complete strangers living separate
+        lives. But one night, they suddenly switch places. Mitsuha wakes up in Taki\’s body, and he
+        in hers. This bizarre occurrence continues to happen randomly, and the two must adjust their
+        lives around each other.</string>
+    <string name="duration">Duration</string>
+    <string name="status">Status</string>
+    <string name="tagline">Tagline</string>
+    <string name="homepage">Homepage</string>
+    <string name="web">https://www.funimationfilms.com/movie/yourname/</string>
+    <string name="movies">Movies</string>
+    <string name="tv_shows">Tv Shows</string>
+</resources>
