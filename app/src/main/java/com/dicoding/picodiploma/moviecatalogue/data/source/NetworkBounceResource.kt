@@ -42,10 +42,10 @@ abstract class NetworkBounceResource<ResultType, RequestType> {
             result.value = Resource.loading(newData, null)
         }
 
-        apiResponse?.let {
-            result.addSource(it) { response ->
+        apiResponse?.let { apiResponses ->
+            result.addSource(apiResponses) { response ->
                 result.removeSource(dbSource)
-                result.removeSource(apiResponse)
+                result.removeSource(apiResponses)
 
                 when (response.status) {
                     StatusResponse.SUCCESS -> {
@@ -57,17 +57,27 @@ abstract class NetworkBounceResource<ResultType, RequestType> {
                                     result.addSource(loadFromDB()) { newData ->
                                         result.value = Resource.success(newData)
                                     }
-                                    Log.e(NetworkBounceResource::class.java.simpleName, "save to db")
+                                    Log.e(
+                                        NetworkBounceResource::class.java.simpleName,
+                                        "save to db"
+                                    )
                                 }
                             }
                         } else {
-                            Log.e(NetworkBounceResource::class.java.simpleName, "not save to db")
+                            Log.e(
+                                NetworkBounceResource::class.java.simpleName,
+                                "not save to db"
+                            )
 
-                            val data = response.body?.let { fetchDataFromCall(it) }
-                            val test = MutableLiveData<ResultType>()
-                            test.value = data
-                            result.addSource(test){
-                                result.value = Resource.success(it)
+                            result.addSource(loadFromDB()){ newData ->
+                                result.removeSource(loadFromDB())
+
+                                val data = response.body?.let { fetchDataFromCall(it, newData) }
+                                val test = MutableLiveData<ResultType>()
+                                test.value = data
+                                result.addSource(test) {
+                                    result.value = Resource.success(it)
+                                }
                             }
                         }
                     }
@@ -89,7 +99,6 @@ abstract class NetworkBounceResource<ResultType, RequestType> {
                 }
             }
         }
-
     }
 
     fun asLiveData(): LiveData<Resource<ResultType>> {
@@ -106,7 +115,7 @@ abstract class NetworkBounceResource<ResultType, RequestType> {
 
     protected abstract fun needSaveToDB(): Boolean
 
-    protected abstract fun fetchDataFromCall(data: RequestType): ResultType?
+    protected abstract fun fetchDataFromCall(data: RequestType, dbData: ResultType?): ResultType?
 
     protected abstract fun saveCallResult(data: RequestType)
 

@@ -12,23 +12,20 @@ import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowen
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.ApiResponse
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.RemoteRepository
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.movieresponse.moviedetail.MovieDetailResult
+import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.tvshowresponse.TvResultWithGenre
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.tvshowresponse.tvshowdetail.TvDetailResult
-import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.tvshowresponse.tvshowgenre.TvGenreResponse
-import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.tvshowresponse.tvshowgenre.TvGenreResult
-import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.tvshowresponse.tvshowpopular.TvPopularResponse
-import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.tvshowresponse.tvshowpopular.TvPopularResult
 import com.dicoding.picodiploma.moviecatalogue.utils.FakeDataDummy
 import com.dicoding.picodiploma.moviecatalogue.utils.LiveDataUtilsTest
 import com.dicoding.picodiploma.moviecatalogue.utils.PagedListUtils
 import com.dicoding.picodiploma.moviecatalogue.vo.Resource
-import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 
 class MainRepositoryTest {
@@ -60,90 +57,45 @@ class MainRepositoryTest {
     }
 
     @Test
-    fun return_popular_movie_live_data_when_success() {
-
-        `when`(localRepository.getAllMoviePopular()).thenReturn(dataSource)
-
-        mainRepository.getPopularMovieData()
+    fun return_popular_movie_live_data_when_get_popular_movie_data_success() {
 
         val listDataMovie = FakeDataDummy.getMovieDummyEntity()
-        val result = Resource.success(PagedListUtils.mockePagedList(listDataMovie))
+        val moviePopularLive = MutableLiveData<List<MoviePopularEntity>>()
+        moviePopularLive.value = listDataMovie
+
+        `when`(localRepository.getAllMoviePopular()).thenReturn(moviePopularLive)
+
+        val result= LiveDataUtilsTest.getValue(mainRepository.getPopularMovieData())
+
 
         verify(localRepository).getAllMoviePopular()
 
         assertNotNull(result)
         assertNotNull(result.body)
-        assertEquals(1, result.body?.size)
+        assertEquals(listDataMovie, result.body)
     }
 
     @Test
-    fun return_popular_tv_show_live_data_when_success() {
-        val expectedTvShowData =
-            listOf(
-                TvPopularEntity(
-                    60625,
-                    "Rick and Morty",
-                    "$imageUrl/qJdfO3ahgAMf2rcmhoqngjBBZW1.jpg",
-                    "Animation, Comedy, Action & Adventure, Sci-Fi & Fantasy",
-                    8.6,
-                    "2013-12-02"
-                )
-            )
+    fun return_popular_tv_show_live_data_when_get_popular_tv_data_success() {
+        val listTvResult = FakeDataDummy.getTvDummyResult()
+        val listGenreTv = FakeDataDummy.getTvGenreDummyResult()
+        val liveDataTvResult = MutableLiveData<ApiResponse<TvResultWithGenre>>()
+        liveDataTvResult.value = ApiResponse.success(TvResultWithGenre(listTvResult, listGenreTv))
 
-        val tvShowDummy = listOf(
-            TvPopularResult(
-                60625,
-                "Rick and Morty",
-                "/qJdfO3ahgAMf2rcmhoqngjBBZW1.jpg",
-                listOf(16, 35, 10759, 10765),
-                8.6,
-                "2013-12-02"
-            )
-        )
+        val listTvEntity = FakeDataDummy.getTvDummyEntity()
+        val liveDataTvEntity = MutableLiveData<List<TvPopularEntity>>()
+        liveDataTvEntity.value = listTvEntity
 
-        val tvShowResponse =
-            TvPopularResponse(
-                1,
-                tvShowDummy,
-                1,
-                1
-            )
-        val tvGenre =
-            listOf(
-                TvGenreResult(
-                    16,
-                    "Animation"
-                ),
-                TvGenreResult(
-                    35,
-                    "Comedy"
-                ),
-                TvGenreResult(
-                    10759,
-                    "Action & Adventure"
-                ),
-                TvGenreResult(
-                    10765,
-                    "Sci-Fi & Fantasy"
-                )
-            )
-        val tvGenreResponse =
-            TvGenreResponse(
-                tvGenre
-            )
+        `when`(remote.getPopularTvRepo()).thenReturn(liveDataTvResult)
+        `when`(localRepository.getPopularTv()).thenReturn(liveDataTvEntity)
 
-        runBlocking {
-            `when`(remote.getPopularTvRepo()).thenReturn(tvShowResponse)
-            `when`(remote.getGenreTvRepo()).thenReturn(tvGenreResponse)
+        val result = LiveDataUtilsTest.getValue(mainRepository.getPopularTvData())
 
-            val result = mainRepository.getPopularTvData()
+        verify(remote).getPopularTvRepo()
+        verify(localRepository).getPopularTv()
 
-            verify(remote).getPopularTvRepo()
-            verify(remote).getGenreTvRepo()
-
-            assertNotNull(result)
-            assertEquals(expectedTvShowData, result)
-        }
+        assertNotNull(result.body)
+        assertEquals(listTvEntity, result.body)
     }
 
     @Test
@@ -152,7 +104,7 @@ class MainRepositoryTest {
         val movieDetailResultLive = MutableLiveData<ApiResponse<MovieDetailResult>>()
         movieDetailResultLive.value = ApiResponse.success(movieDetailResult)
 
-        val movieDetailEntityDummy = FakeDataDummy.getMovieDetaiEntityDummy()
+        val movieDetailEntityDummy = FakeDataDummy.getMovieDetailEntityDummy()
         val movieDetailEntityLive = MutableLiveData<MovieDetailEntity>()
         movieDetailEntityLive.value = movieDetailEntityDummy
 
@@ -169,65 +121,23 @@ class MainRepositoryTest {
     }
 
     @Test
-    fun return_detail_tv_live_data_when_success() {
-        val detailTvDummy =
-            TvDetailResult(
-                "/mzzHr6g1yvZ05Mc7hNj3tUdy2bM.jpg",
-                "2013-12-02",
-                listOf(
-                    TvGenreResult(
-                        10765,
-                        "Sci-Fi & Fantasy"
-                    ),
-                    TvGenreResult(
-                        10759,
-                        "Action & Adventure"
-                    ),
-                    TvGenreResult(
-                        16,
-                        "Animation"
-                    ),
-                    TvGenreResult(
-                        35,
-                        "Comedy"
-                    )
-                ),
-                "http://www.adultswim.com/videos/rick-and-morty",
-                listOf(22),
-                60625,
-                "Rick and Morty",
-                "Rick is a mentally-unbalanced but scientifically-gifted old man who has recently reconnected with his family. He spends most of his time involving his young grandson Morty in dangerous, outlandish adventures throughout space and alternate universes. Compounded with Morty's already unstable family life, these events cause Morty much distress at home and school.",
-                "/qJdfO3ahgAMf2rcmhoqngjBBZW1.jpg",
-                "Returning Series",
-                8.6
-            )
+    fun return_detail_tv_live_data_when_get_tv_detail_by_id_success() {
+        val tvDetailResult = FakeDataDummy.getTvDetailResultDummy()
+        val liveTvDetailResult = MutableLiveData<ApiResponse<TvDetailResult>>()
+        liveTvDetailResult.value = ApiResponse.success(tvDetailResult)
 
-        val expectedDetailTv =
-            TvDetailEntity(
-                genres = "Sci-Fi & Fantasy, Action & Adventure, Animation, Comedy",
-                backdropPath = "$imageUrl/mzzHr6g1yvZ05Mc7hNj3tUdy2bM.jpg",
-                homepage = "http://www.adultswim.com/videos/rick-and-morty",
-                id = 60625,
-                overview = "Rick is a mentally-unbalanced but scientifically-gifted old man who has recently reconnected with his family. He spends most of his time involving his young grandson Morty in dangerous, outlandish adventures throughout space and alternate universes. Compounded with Morty's already unstable family life, these events cause Morty much distress at home and school.",
-                imagePath = "$imageUrl/qJdfO3ahgAMf2rcmhoqngjBBZW1.jpg",
-                releaseDate = "2013-12-02",
-                runtime = 22,
-                status = "Returning Series",
-                title = "Rick and Morty",
-                voteAverage = 8.6
-            )
+        val tvDetailEntity = FakeDataDummy.getTvDetailEntity()
+        val liveTvDetailEntity = MutableLiveData<TvDetailEntity>()
+        liveTvDetailEntity.value = tvDetailEntity
 
-        runBlocking {
-            `when`(remote.getDetailTvRepo(idTv)).thenReturn(detailTvDummy)
+        `when`(remote.getDetailTvRepo(idTv)).thenReturn(liveTvDetailResult)
+        `when`(localRepository.getTvDetailById(idTv)).thenReturn(liveTvDetailEntity)
 
-            val result = mainRepository.getDetailTvData(idTv)
+        val result = LiveDataUtilsTest.getValue(mainRepository.getTvDetailById(idTv))
 
-            verify(remote).getDetailTvRepo(idTv)
+        assertNotNull(result)
+        assertEquals(tvDetailEntity, result)
 
-            assertNotNull(result)
-            assertEquals(expectedDetailTv, result)
-
-        }
     }
 
 }

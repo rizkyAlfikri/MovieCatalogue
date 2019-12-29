@@ -1,19 +1,17 @@
 package com.dicoding.picodiploma.moviecatalogue.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Color
 import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.movieresponse.moviegenre.MovieGenreResult
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.tvshowresponse.tvshowgenre.TvGenreResult
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlin.coroutines.CoroutineContext
+import java.text.SimpleDateFormat
 
 fun View.visible() {
     this.visibility = View.VISIBLE
@@ -141,4 +139,35 @@ fun convertMinToHour(minute: Int): String {
     }
 }
 
+@SuppressLint("SimpleDateFormat")
+fun convertDate(date: String): String {
+    if (date.isEmpty() || date == "") return ""
+    val sdf = SimpleDateFormat("yyyy-MM-dd")
+    val formattedDate = sdf.parse(date)
+    val newSdf = SimpleDateFormat("dd-MMM-yyyy")
+    return formattedDate?.let { newSdf.format(it) }.toString()
+}
+
+fun convertPeopleGender(gender: Int): String {
+    return if (gender == 1) {
+        "Female"
+    } else if (gender == 2) {
+        "Male"
+    } else {
+        " - "
+    }
+}
+
+@SuppressLint("SimpleDateFormat")
+fun convertBirthDay(date: String): String {
+    if (date.isEmpty() || date == "") return ""
+    val sdf = SimpleDateFormat("yyyy-MM-dd")
+    val formattedDate = sdf.parse(date)
+    val newSdf = SimpleDateFormat("EEE, dd-MMM-yyyy")
+    return formattedDate?.let { newSdf.format(it) }.toString()
+}
+
+interface MyAdapterClickListener <T> {
+    fun onItemClicked(data: T, state: Boolean)
+}
 

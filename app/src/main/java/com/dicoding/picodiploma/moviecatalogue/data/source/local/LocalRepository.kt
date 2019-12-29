@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.movieentity.moviedetailentity.MovieDetailEntity
 import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.movieentity.moviepopularentity.MoviePopularEntity
-import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.tvDetailEntity.TvDetailEntity
 import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.tvPopularEntity.TvPopularEntity
 import com.dicoding.picodiploma.moviecatalogue.data.source.local.room.MovieDao
 import com.dicoding.picodiploma.moviecatalogue.data.source.local.room.TvShowDao
@@ -31,37 +30,63 @@ class LocalRepository private constructor(
         }
     }
 
-    fun getAllMoviePopular(): DataSource.Factory<Int, MoviePopularEntity> {
-        return movieDao.getAllMoviePopular()
-    }
+    // ============================ Movie Query ============================
+
+    fun getAllMoviePopular() = movieDao.getAllMoviePopular()
+
 
     fun insertListMoviePopular(listMoviePopular: List<MoviePopularEntity>) {
         movieDao.insertListMoviePopular(listMoviePopular)
     }
 
+    fun getAllMovieFavorite(): DataSource.Factory<Int, MoviePopularEntity> {
+        return movieDao.getAllMovieFavorite()
+    }
+
+    fun getMovieFavoriteById(id: Int): LiveData<MoviePopularEntity> =
+        movieDao.getMovieFavoriteById(id)
+
+    fun insertMovieFavorite(moviePopularEntity: MoviePopularEntity) {
+        movieDao.insertMovieFavorite(moviePopularEntity)
+    }
+
+    fun deleteMovieFavorite(moviePopularEntity: MoviePopularEntity) {
+        movieDao.deleteMovieFavorite(moviePopularEntity)
+    }
+
     fun getMovieDetailById(id: Int): LiveData<MovieDetailEntity> {
         return movieDao.getMovieDetailById(id)
-
     }
 
-    fun insertMovieDetailFavorite(movieDetailEntity: MovieDetailEntity) {
-        movieDao.insertMovieDetailFavorite(movieDetailEntity)
+    fun deleteMovieFavoriteById(movieId: Int) {
+        movieDao.deleteMovieFavoriteById(movieId)
     }
 
-    fun deleteMovieDetailFavorite(movieDetailEntity: MovieDetailEntity) {
-        movieDao.deleteMovieDetailFavorite(movieDetailEntity)
-    }
+    // ============================ Tv Show Query ===========================
 
     fun getPopularTv() = tvShowDao.getPopularTv()
 
     fun insertAllTvPopular(listTv: List<TvPopularEntity>) = tvShowDao.insertAllTvPopular(listTv)
 
+    fun getAllTvShowFavorite() = tvShowDao.getAllTvShowFavorite()
+
     fun getTvDetailById(id: Int) = tvShowDao.getDetailTvById(id)
 
-    fun insertTvDetailFavorite(tvDetailEntity: TvDetailEntity) =
-        tvShowDao.insertTvDetailFavorite(tvDetailEntity)
+    fun insertTvDetailFavorite(tvPopularEntity: TvPopularEntity) =
+        tvShowDao.insertTvFavorite(tvPopularEntity)
 
-    fun deleteTvDetailFavorite(tvDetailEntity: TvDetailEntity) =
-        tvShowDao.deleteTvDetailFavorite(tvDetailEntity)
+    fun deleteTvFavorite(tvPopularEntity: TvPopularEntity) =
+        tvShowDao.deleteTvFavorite(tvPopularEntity)
+
+    fun getTvFavoriteById(id: Int) = tvShowDao.getTvFavoriteById(id)
+
+    fun deleteTvFavoriteById(tvId: Int) = tvShowDao.deleteTvFavoriteById(tvId)
+
+
+    // ============================ Other ===========================
+
+    fun getSearchEntity() = movieDao.getSearchEntity()
+
+    fun getPeopleDetailById(idPeople: Int) = movieDao.getPeopleDetailById(idPeople)
 
 }

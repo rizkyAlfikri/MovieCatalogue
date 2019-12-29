@@ -1,8 +1,11 @@
 package com.dicoding.picodiploma.moviecatalogue.ui.detailmovie
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.dicoding.picodiploma.moviecatalogue.data.source.MainRepository
-import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.movieentity.moviedetailentity.MovieDetailEntity
+import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.movieentity.moviepopularentity.MoviePopularEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -11,30 +14,29 @@ class DetailMovieViewModel(
 ) :
     ViewModel() {
 
-    private var movieId = MutableLiveData<Int>()
-    private var isTest = false
+    private val movieId = MutableLiveData<Int>()
 
     fun setIdMovie(id: Int) {
         movieId.value = id
     }
 
-    fun getMovieDetail() = Transformations.switchMap(movieId){
+    val getMovieDetail = Transformations.switchMap(movieId){
         mainRepository.getDetailMovieData(it)
     }
 
-    fun getMovieDetailById(id: Int): LiveData<MovieDetailEntity> {
-        return mainRepository.getMovieDetailById(id)
+    val getMovieFavoriteById = Transformations.switchMap(movieId){
+        mainRepository.getMovieFavoriteById(it)
     }
 
-    fun insertMovieDetailFavorite(movieDetailEntity: MovieDetailEntity) {
+    fun insertMovieFavorite(data: MoviePopularEntity) {
         viewModelScope.launch(Dispatchers.IO) {
-            mainRepository.insertMovieDetailFavorite(movieDetailEntity)
+            mainRepository.insertMovieFavorite(data)
         }
     }
 
-    fun deleteMovieDetailFavorite(movieDetailEntity: MovieDetailEntity) {
-        viewModelScope.launch(Dispatchers.IO){
-            mainRepository.deleteMovieDetailFavorite(movieDetailEntity)
+    fun deleteMovieFavorite(data: MoviePopularEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            mainRepository.deleteMovieFavorite(data)
         }
     }
 

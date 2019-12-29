@@ -8,14 +8,12 @@ import com.dicoding.picodiploma.moviecatalogue.data.source.MainRepository
 import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.movieentity.moviepopularentity.MoviePopularEntity
 import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.tvPopularEntity.TvPopularEntity
 import com.dicoding.picodiploma.moviecatalogue.utils.FakeDataDummy
-import com.dicoding.picodiploma.moviecatalogue.utils.TestContextProvider
 import com.dicoding.picodiploma.moviecatalogue.vo.Resource
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
@@ -30,10 +28,7 @@ class MainViewModelTest {
     private lateinit var repository: MainRepository
 
     @Mock
-    private lateinit var movieObserver: Observer<Resource<PagedList<MoviePopularEntity>>>
-
-    @Mock
-    private lateinit var pagedListMovie: PagedList<MoviePopularEntity>
+    private lateinit var movieObserver: Observer<Resource<List<MoviePopularEntity>>>
 
     @Mock
     private lateinit var tvShowObserver: Observer<Resource<List<TvPopularEntity>>>
@@ -50,13 +45,14 @@ class MainViewModelTest {
 
     @Test
     fun return_list_movie_popular_live_data_when_get_movie_popular_success() {
-        val liveDataMovie = MutableLiveData<Resource<PagedList<MoviePopularEntity>>>()
-        liveDataMovie.value = Resource.success(pagedListMovie)
+        val listMoviePopular = FakeDataDummy.getMovieDummyEntity()
+        val liveDataMovie = MutableLiveData<Resource<List<MoviePopularEntity>>>()
+        liveDataMovie.value = Resource.success(listMoviePopular)
 
         `when`(repository.getPopularMovieData()).thenReturn(liveDataMovie)
 
         mainViewModel.getMoviePopularData().observeForever(movieObserver)
-        verify(movieObserver).onChanged(Resource.success(pagedListMovie))
+        verify(movieObserver).onChanged(Resource.success(listMoviePopular))
     }
 
 

@@ -15,12 +15,21 @@ interface TvShowDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllTvPopular(listTv: List<TvPopularEntity>)
 
+    @Query("SELECT * FROM tv_popular_entity ORDER by num DESC")
+    fun getAllTvShowFavorite(): DataSource.Factory<Int, TvPopularEntity>
+
     @Query("SELECT * FROM tv_detail_favorite WHERE id = :id")
     fun getDetailTvById(id: Int): LiveData<TvDetailEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTvDetailFavorite(tvDetailEntity: TvDetailEntity)
+    fun insertTvFavorite(tvPopularEntity: TvPopularEntity)
 
     @Delete
-    fun deleteTvDetailFavorite(tvDetailEntity: TvDetailEntity)
+    fun deleteTvFavorite(tvPopularEntity: TvPopularEntity)
+
+    @Query("DELETE FROM tv_popular_entity WHERE idTv = :tvId")
+    fun deleteTvFavoriteById(tvId: Int)
+
+    @Query("SELECT * FROM tv_popular_entity WHERE idTv = :id")
+    fun getTvFavoriteById(id: Int): LiveData<TvPopularEntity>
 }

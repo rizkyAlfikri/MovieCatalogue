@@ -10,7 +10,7 @@
 
     <item
         android:bottom="10dp"
-        android:drawable="@drawable/ic_broken_image_loading"
+        android:drawable="@drawable/ic_refresh"
         android:top="10dp"
         android:right="10dp"
         android:left="10dp"/>

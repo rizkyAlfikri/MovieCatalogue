@@ -16,10 +16,9 @@ import com.dicoding.picodiploma.moviecatalogue.data.source.remote.ApiResponse
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.RemoteRepository
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.movieresponse.MovieResultWithGenre
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.movieresponse.moviedetail.MovieDetailResult
-import com.dicoding.picodiploma.moviecatalogue.utils.genreTvDetailBuilder
-import com.dicoding.picodiploma.moviecatalogue.utils.movieDetailGenreBuilder
-import com.dicoding.picodiploma.moviecatalogue.utils.movieGenreBuilder
-import com.dicoding.picodiploma.moviecatalogue.utils.tvGenreBuilder
+import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.tvshowresponse.TvResultWithGenre
+import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.tvshowresponse.tvshowdetail.TvDetailResult
+import com.dicoding.picodiploma.moviecatalogue.utils.*
 import com.dicoding.picodiploma.moviecatalogue.vo.Resource
 
 class FakeMainRepository(
@@ -46,15 +45,15 @@ class FakeMainRepository(
         }
     }
 
-    override fun getPopularMovieData(): LiveData<Resource<PagedList<MoviePopularEntity>>> {
+    override fun getPopularMovieData(): LiveData<Resource<List<MoviePopularEntity>>> {
         return object :
-            NetworkBounceResource<PagedList<MoviePopularEntity>, MovieResultWithGenre>() {
-            override fun loadFromDB(): LiveData<PagedList<MoviePopularEntity>> {
-                return LivePagedListBuilder(local.getAllMoviePopular(), 10).build()
+            NetworkBounceResource<List<MoviePopularEntity>, MovieResultWithGenre>() {
+            override fun loadFromDB(): LiveData<List<MoviePopularEntity>> {
+                return local.getAllMoviePopular()
             }
 
-            override fun shouldFetch(data: PagedList<MoviePopularEntity>?): Boolean {
-                return (data == null) || (data.isEmpty())
+            override fun shouldFetch(data: List<MoviePopularEntity>?): Boolean {
+                return true
             }
 
             override fun createCall(): LiveData<ApiResponse<MovieResultWithGenre>> {
@@ -62,21 +61,17 @@ class FakeMainRepository(
             }
 
             override fun needSaveToDB(): Boolean {
-                return true
+                return false
             }
 
-            override fun fetchDataFromCall(data: MovieResultWithGenre): PagedList<MoviePopularEntity>? {
-                return null
-            }
-
-            override fun saveCallResult(data: MovieResultWithGenre) {
+            override fun fetchDataFromCall(data: MovieResultWithGenre): List<MoviePopularEntity>? {
                 val listMoviePopular = mutableListOf<MoviePopularEntity>()
-                Log.e(MainRepository::class.java.simpleName, "data = ${data.movieResult.size}")
                 data.movieResult.forEach {
                     val movieGenre = movieGenreBuilder(it.genreIds, data.movieGenreResult)
 
                     listMoviePopular.add(
                         MoviePopularEntity(
+                            null,
                             it.id,
                             "$imageUrl${it.posterPath}",
                             it.title,
@@ -86,8 +81,11 @@ class FakeMainRepository(
                         )
                     )
                 }
+                return listMoviePopular
+            }
 
-                local.insertListMoviePopular(listMoviePopular)
+            override fun saveCallResult(data: MovieResultWithGenre) {
+
             }
         }.asLiveData()
     }
@@ -121,7 +119,7 @@ class FakeMainRepository(
                     data.id,
                     data.overview,
                     "$imageUrl${data.posterPath}",
-                    data.releaseDate,
+                    convertDate(data.releaseDate),
                     data.runtime,
                     data.status,
                     data.tagline,
@@ -135,56 +133,175 @@ class FakeMainRepository(
             }
         }.asLiveData()
     }
-    override suspend fun getPopularTvData(): List<TvPopularEntity> {
-        val listTvPopularRepo = remote.getPopularTvRepo().results
-        val listTvGenreRepo = remote.getGenreTvRepo().genres
-        val listTvPopularEntity = mutableListOf<TvPopularEntity>()
-        listTvPopularRepo.map {
-            val genreBuilder = tvGenreBuilder(it.genreIds, listTvGenreRepo)
-            listTvPopularEntity.add(
-                TvPopularEntity(
-                    it.id,
-                    it.name,
-                    "$imageUrl${it.posterPath}",
-                    genreBuilder,
-                    it.voteAverage,
-                    it.firstAirDate
-                )
-            )
-        }
 
-        return listTvPopularEntity
+    override fun getPopularTvData(): LiveData<Resource<List<TvPopularEntity>>> {
+        return object : NetworkBounceResource<List<TvPopularEntity>, TvResultWithGenre>() {
+            override fun loadFromDB(): LiveData<List<TvPopularEntity>> {
+                return local.getPopularTv()
+            }
+
+            override fun shouldFetch(data: List<TvPopularEntity>?): Boolean {
+                return true
+            }
+
+            override fun createCall(): LiveData<ApiResponse<TvResultWithGenre>>? {
+                return remote.getPopularTvRepo()
+            }
+
+            override fun needSaveToDB(): Boolean {
+                return false
+            }
+
+            override fun fetchDataFromCall(data: TvResultWithGenre): List<TvPopularEntity>? {
+                val listTv = mutableListOf<TvPopularEntity>()
+
+                data.listTvShow.forEach {
+                    val tvGenre = tvGenreBuilder(it.genreIds, data.listTvGenre)
+                    listTv.add(
+                        TvPopularEntity(
+                            null,
+                            it.id,
+                            it.name,
+                            "$imageUrl${it.posterPath}",
+                            tvGenre,
+                            it.voteAverage,
+                            it.firstAirDate
+                        )
+                    )
+                }
+
+                return listTv
+            }
+
+            override fun saveCallResult(data: TvResultWithGenre) {
+
+            }
+        }.asLiveData()
     }
 
-    override suspend fun getDetailTvData(idTv: Int): TvDetailEntity {
-        val tvDetailResult = remote.getDetailTvRepo(idTv)
-        val genre = genreTvDetailBuilder(tvDetailResult.genres)
+    override fun getDetailTvData(idTv: Int): LiveData<Resource<TvDetailEntity>> {
+        return object : NetworkBounceResource<TvDetailEntity, TvDetailResult>(){
+            override fun loadFromDB(): LiveData<TvDetailEntity> {
+                return local.getTvDetailById(idTv)
+            }
 
-        return TvDetailEntity(
-            genre,
-            "$imageUrl${tvDetailResult.backdropPath}",
-            tvDetailResult.homepage,
-            tvDetailResult.id,
-            tvDetailResult.overview,
-            "$imageUrl${tvDetailResult.posterPath}",
-            tvDetailResult.firstAirDate,
-            tvDetailResult.episodeRunTime[0],
-            tvDetailResult.status,
-            tvDetailResult.name,
-            tvDetailResult.voteAverage
-        )
+            override fun shouldFetch(data: TvDetailEntity?): Boolean {
+                return true
+            }
 
+            override fun createCall(): LiveData<ApiResponse<TvDetailResult>>? {
+                return remote.getDetailTvRepo(idTv)
+            }
+
+            override fun needSaveToDB(): Boolean {
+                return false
+            }
+
+            override fun fetchDataFromCall(data: TvDetailResult): TvDetailEntity? {
+                val genre = genreTvDetailBuilder(data.genres)
+
+                return TvDetailEntity(
+                    genre,
+                    "$imageUrl${data.backdropPath}",
+                    data.homepage,
+                    data.id,
+                    data.overview,
+                    "$imageUrl${data.posterPath}",
+                    data.firstAirDate,
+                    data.episodeRunTime[0],
+                    data.status,
+                    data.name,
+                    data.voteAverage)
+            }
+
+            override fun saveCallResult(data: TvDetailResult) {
+
+            }
+        }.asLiveData()
     }
 
-    override fun getMovieDetailById(id: Int): LiveData<MovieDetailEntity> {
-        return local.getMovieDetailById(id)
+    override fun getMovieFavoriteById(id: Int): LiveData<MoviePopularEntity> {
+        return local.getMovieFavoriteById(id)
     }
 
-    override fun insertMovieDetailFavorite(movieDetailEntity: MovieDetailEntity) {
-        local.insertMovieDetailFavorite(movieDetailEntity)
+    override fun insertMovieFavorite(moviePopularEntity: MoviePopularEntity) {
+        local.insertMovieFavorite(moviePopularEntity)
     }
 
-    override fun deleteMovieDetailFavorite(movieDetailEntity: MovieDetailEntity) {
-        local.deleteMovieDetailFavorite(movieDetailEntity)
+    override fun deleteMovieFavorite(moviePopularEntity: MoviePopularEntity) {
+        local.deleteMovieFavorite(moviePopularEntity)
     }
+
+    override fun getTvDetailById(id: Int): LiveData<TvDetailEntity> {
+        return local.getTvDetailById(id)
+    }
+
+    override fun getTvFavoriteById(id: Int): LiveData<TvPopularEntity> {
+        return local.getTvFavoriteById(id)
+    }
+
+    override fun insertTvFavorite(tvPopularEntity: TvPopularEntity) {
+        local.insertTvDetailFavorite(tvPopularEntity)
+    }
+
+    override fun deleteTvFavorite(tvPopularEntity: TvPopularEntity) {
+        local.deleteTvFavorite(tvPopularEntity)
+    }
+
+    override fun getFavoriteMovieData(): LiveData<Resource<PagedList<MoviePopularEntity>>> {
+        return object : NetworkBounceResource<PagedList<MoviePopularEntity>, MovieDetailResult>(){
+            override fun loadFromDB(): LiveData<PagedList<MoviePopularEntity>> {
+                return LivePagedListBuilder(local.getAllMovieFavorite(), 10).build()
+            }
+
+            override fun shouldFetch(data: PagedList<MoviePopularEntity>?): Boolean {
+                return false
+            }
+
+            override fun createCall(): LiveData<ApiResponse<MovieDetailResult>>? {
+                return null
+            }
+
+            override fun needSaveToDB(): Boolean {
+                return false
+            }
+
+            override fun fetchDataFromCall(data: MovieDetailResult): PagedList<MoviePopularEntity>? {
+                return null
+            }
+
+            override fun saveCallResult(data: MovieDetailResult) {
+
+            }
+        }.asLiveData()
+    }
+
+    override fun getFavoriteTvData(): LiveData<Resource<PagedList<TvPopularEntity>>> {
+        return object : NetworkBounceResource<PagedList<TvPopularEntity>, TvDetailResult>() {
+            override fun loadFromDB(): LiveData<PagedList<TvPopularEntity>> {
+                return LivePagedListBuilder(local.getAllTvShowFavorite(), 10).build()
+            }
+
+            override fun shouldFetch(data: PagedList<TvPopularEntity>?): Boolean {
+                return false
+            }
+
+            override fun createCall(): LiveData<ApiResponse<TvDetailResult>>? {
+                return null
+            }
+
+            override fun needSaveToDB(): Boolean {
+                return false
+            }
+
+            override fun fetchDataFromCall(data: TvDetailResult): PagedList<TvPopularEntity>? {
+                return null
+            }
+
+            override fun saveCallResult(data: TvDetailResult) {
+
+            }
+        }.asLiveData()
+    }
+
 }

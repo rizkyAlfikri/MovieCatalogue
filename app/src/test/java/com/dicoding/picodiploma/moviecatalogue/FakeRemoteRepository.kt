@@ -7,6 +7,8 @@ import com.dicoding.picodiploma.moviecatalogue.data.source.remote.ApiResponse
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.RemoteRepository
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.movieresponse.MovieResultWithGenre
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.movieresponse.moviedetail.MovieDetailResult
+import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.tvshowresponse.TvResultWithGenre
+import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.tvshowresponse.tvshowdetail.TvDetailResult
 import com.dicoding.picodiploma.moviecatalogue.network.ApiService
 import kotlinx.coroutines.*
 import java.lang.Exception
@@ -35,6 +37,7 @@ class FakeRemoteRepository (private val apiService: ApiService, private val apiK
         val resultMoviePopular = MutableLiveData<ApiResponse<MovieResultWithGenre>>()
 
         CoroutineScope(Dispatchers.IO + exception).launch {
+
             try {
                 val listPopularMovie = async { apiService.getMoviePopularApi(apiKey) }
                 val listGenreMovie = async { apiService.getMovieGenreApi(apiKey) }
@@ -45,6 +48,7 @@ class FakeRemoteRepository (private val apiService: ApiService, private val apiK
                         listGenreMovie.await().genres
                     )
                 resultMoviePopular.postValue(ApiResponse.success(movieWithGenre))
+
             } catch (e: Exception) {
                 resultMoviePopular.postValue(ApiResponse.error("${e.message}", null))
             } catch (e: NullPointerException) {
@@ -57,8 +61,8 @@ class FakeRemoteRepository (private val apiService: ApiService, private val apiK
 
     fun getDetailMovieRepo(idMovie: Int): LiveData<ApiResponse<MovieDetailResult>> {
         val resultMovieDetail = MutableLiveData<ApiResponse<MovieDetailResult>>()
-
         CoroutineScope(Dispatchers.IO + exception).launch {
+
             try {
                 resultMovieDetail.postValue(
                     ApiResponse.success(apiService.getMovieDetailApi(idMovie, apiKey))
@@ -73,11 +77,45 @@ class FakeRemoteRepository (private val apiService: ApiService, private val apiK
         return resultMovieDetail
     }
 
-    suspend fun getPopularTvRepo() = apiService.getTvPopularApi(apiKey)
 
-    suspend fun getGenreTvRepo() = apiService.getTvGenreApi(apiKey)
+    fun getPopularTvRepo(): LiveData<ApiResponse<TvResultWithGenre>> {
+        val resultTvPopular = MutableLiveData<ApiResponse<TvResultWithGenre>>()
 
-    suspend fun getDetailTvRepo(idTv: Int) = apiService.getTvDetailApi(idTv, apiKey)
+        CoroutineScope(Dispatchers.IO + exception).launch {
+            val tvPopularResult = async { apiService.getTvPopularApi(apiKey) }
+            val tvGenreResult = async { apiService.getTvGenreApi(apiKey) }
 
+            val tvResultWithGenre =
+                TvResultWithGenre(tvPopularResult.await().results, tvGenreResult.await().genres)
 
+            try {
+                resultTvPopular.postValue(ApiResponse.success(tvResultWithGenre))
+            } catch (e: Exception) {
+                resultTvPopular.postValue(ApiResponse.error("${e.message}", null))
+            } catch (e: NullPointerException) {
+                resultTvPopular.postValue(ApiResponse.error("${e.message}", null))
+            }
+        }
+
+        return resultTvPopular
+
+    }
+
+    fun getDetailTvRepo(idTv: Int): LiveData<ApiResponse<TvDetailResult>> {
+        val resultTvDetail = MutableLiveData<ApiResponse<TvDetailResult>>()
+
+        CoroutineScope(Dispatchers.IO + exception).launch {
+            val tvDetailResult = apiService.getTvDetailApi(idTv, apiKey)
+
+            try {
+                resultTvDetail.postValue(ApiResponse.success(tvDetailResult))
+            } catch (e: Exception) {
+                resultTvDetail.postValue(ApiResponse.error("${e.message}", null))
+            } catch (e: NullPointerException) {
+                resultTvDetail.postValue(ApiResponse.empty("${e.message}", null))
+            }
+        }
+
+        return resultTvDetail
+    }
 }

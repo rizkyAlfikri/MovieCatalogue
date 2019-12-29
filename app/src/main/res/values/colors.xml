@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3B526B</color>
+    <color name="colorPrimary">#1B263D</color>
     <color name="colorPrimaryDark">#132137</color>
     <color name="colorAccent">#FF5584</color>
     <color name="colorImage">#13C5C6</color>
     <color name="colorText">#3E3E3E</color>
     <color name="colorTextSecondary">#D1D0D0</color>
-    <color name="colorTextTertiary">#EFEFEF</color>
+    <color name="colorTextTertiary">#FFFFFF</color>
     <color name="colorAccentSecondary">#FF8FAF</color>
     <color name="bgapps">#243470</color>
-    <color name="primary_text">#212121</color>
+    <color name="primary_text">#000000</color>
     <color name="backgroundColor">#132137</color>
     <color name="accentBackground">#00CC71</color>
     <color name="ratting">#FFB300</color>
     <color name="textSecond">#757575</color>
+    <color name="divider">#BDBDBD</color>
+    <color name="searchBar">#202E46</color>
+    <color name="stateTrue">#222222</color>
+    <color name="stateFalse">#505050</color>
 </resources>

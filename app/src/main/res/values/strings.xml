@@ -4,8 +4,8 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_home">HomeActivity</string>
-    <string name="tab_text_1">Home</string>
-    <string name="tab_text_2">Dashboard</string>
+    <string name="tab_text_1">Movies</string>
+    <string name="tab_text_2">Tv Shows</string>
     <string name="tab_text_3">Notification</string>
 
     <string name="title_activity_movie_detail">MovieDetailActivity</string>
@@ -31,4 +31,34 @@
     <string name="web">https://www.funimationfilms.com/movie/yourname/</string>
     <string name="movies">Movies</string>
     <string name="tv_shows">Tv Shows</string>
+    <string name="favorite">Favorite</string>
+    <string name="settings">Settings</string>
+    <string name="title_activity_favorite">FavoriteActivity</string>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="release">Release :</string>
+    <string name="duration1">Duration:</string>
+    <string name="ratting">Ratting:</string>
+    <string name="search">Search</string>
+    <string name="deathday">Deathday :</string>
+    <string name="homepage2">Homepage :</string>
+
+    <array name="spinner">
+        <item>Movies</item>
+        <item>Tv Shows</item>
+        <item>Peoples</item>
+    </array>
+
+    <array name="spinner_movie">
+        <item>Popular Movies</item>
+        <item>Top Rated Movies</item>
+        <item>Upcoming Movies</item>
+    </array>
+
+    <array name="spinner_tv">
+        <item>Popular Tv Shows</item>
+        <item>Top Rated Tv Shows</item>
+        <item>On The Air Tv Shows</item>
+    </array>
 </resources>

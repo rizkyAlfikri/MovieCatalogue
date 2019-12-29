@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dicoding.picodiploma.moviecatalogue.R
 import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.movieentity.moviedetailentity.MovieDetailEntity
+import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.movieentity.moviepopularentity.MoviePopularEntity
 import com.dicoding.picodiploma.moviecatalogue.utils.convertMinToHour
 import com.dicoding.picodiploma.moviecatalogue.utils.invisible
 import com.dicoding.picodiploma.moviecatalogue.utils.makeStatusBarTransparent
@@ -72,7 +73,7 @@ class DetailMovieActivity : AppCompatActivity() {
 
     private fun showDetailMovie() {
 
-        movieViewModel.getMovieDetail().observe(this, Observer { resource ->
+        movieViewModel.getMovieDetail.observe(this, Observer { resource ->
 
             when (resource.status) {
                 LOADING -> progress_bar.visible()
@@ -111,22 +112,34 @@ class DetailMovieActivity : AppCompatActivity() {
     }
 
     private fun saveToFavorite(data: MovieDetailEntity) {
-        movieViewModel.getMovieDetailById(data.id).observe(this, Observer { movie ->
+        val moviePopularEntity = MoviePopularEntity(
+            null,
+            data.id,
+            data.imagePath,
+            data.title,
+            data.genres,
+            data.releaseDate,
+            data.voteAverage,
+            true
+        )
+
+        movieViewModel.getMovieFavoriteById.observe(this, Observer { movie ->
             var isFavorite = movie != null
             val btnText = "Add To Favorite"
             val btnTextNo = "Remove from favorite list"
 
-            if (movie == null) {
+
+            if (!isFavorite) {
                 btn_watchlist.text = btnText
                 btn_watchlist.setOnClickListener {
-                    movieViewModel.insertMovieDetailFavorite(data)
+                    movieViewModel.insertMovieFavorite(moviePopularEntity)
                     toast("${data.title} has been added to favorite list")
                     isFavorite = !isFavorite
                 }
             } else {
                 btn_watchlist.text = btnTextNo
                 btn_watchlist.setOnClickListener {
-                    movieViewModel.deleteMovieDetailFavorite(data)
+                    movieViewModel.deleteMovieFavorite(movie)
                     toast("${data.title} has been remove from favorite list")
                     isFavorite = !isFavorite
                 }

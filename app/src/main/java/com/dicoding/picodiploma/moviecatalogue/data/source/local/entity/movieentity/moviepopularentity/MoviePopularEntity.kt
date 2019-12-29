@@ -6,17 +6,21 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "movie_popular_entity")
 data class MoviePopularEntity(
-    @ColumnInfo(name = "id")
-    @PrimaryKey
-    var id: Int,
+    @ColumnInfo(name = "num")
+    @PrimaryKey(autoGenerate = true)
+    var id: Int?,
+    @ColumnInfo(name = "idMovie")
+    var idMovie: Int,
     @ColumnInfo(name = "image_path")
-    var imagePath: String,
+    var imagePath: String?,
     @ColumnInfo(name = "title")
-    var title: String,
+    var title: String?,
     @ColumnInfo(name = "genre")
     var genre: String,
     @ColumnInfo(name = "release_date")
-    var releaseDate: String,
+    var releaseDate: String?,
     @ColumnInfo(name = "vote_average")
-    var voteAverage: Double
+    var voteAverage: Double?,
+    @ColumnInfo(name = "isFavorite")
+    var isFavorite: Boolean = false
 )

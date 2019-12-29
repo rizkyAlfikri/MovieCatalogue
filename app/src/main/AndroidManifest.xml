@@ -14,6 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".ui.detailpeople.DetailPeopleActivity"></activity>
+        <activity android:name=".ui.search.SearchActivity" />
+        <activity
+            android:name=".ui.favorite.FavoriteActivity"
+            android:label="@string/title_activity_favorite"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.detailtvshow.DetailTvShowActivity" />
         <activity
             android:name=".ui.detailmovie.DetailMovieActivity"

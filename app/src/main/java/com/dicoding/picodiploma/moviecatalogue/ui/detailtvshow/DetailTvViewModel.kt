@@ -2,13 +2,14 @@ package com.dicoding.picodiploma.moviecatalogue.ui.detailtvshow
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dicoding.picodiploma.moviecatalogue.data.source.MainRepository
-import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.tvDetailEntity.TvDetailEntity
+import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.tvPopularEntity.TvPopularEntity
 import com.dicoding.picodiploma.moviecatalogue.utils.CoroutineContextProvider
-import com.dicoding.picodiploma.moviecatalogue.utils.EspressoIdlingResource
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DetailTvViewModel(
@@ -16,25 +17,35 @@ class DetailTvViewModel(
     private val context: CoroutineContextProvider = CoroutineContextProvider()
 ) : ViewModel() {
 
-    private var idTv = 0
-    private val tvDetailData = MutableLiveData<TvDetailEntity>()
     private val handler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
         Log.e(DetailTvViewModel::class.java.name, "${throwable.message}")
     }
 
+    private var tvShowId = MutableLiveData<Int>()
+
     fun setTvId(id: Int) {
-        idTv = id
+        tvShowId.value = id
     }
 
-    fun getTvDetail(): MutableLiveData<TvDetailEntity> {
-        EspressoIdlingResource.idlingIncrement()
+    val getTvDetail = Transformations.switchMap(tvShowId) {
+        mainRepository.getDetailTvData(it)
+    }
 
-        viewModelScope.launch(context.main + handler) {
-            tvDetailData.postValue(mainRepository.getDetailTvData(idTv))
+    val getTvFavoriteById = Transformations.switchMap(tvShowId) {
+        mainRepository.getTvFavoriteById(it)
+    }
+
+    fun insertTvFavorite(tvPopularEntity: TvPopularEntity) {
+        viewModelScope.launch(Dispatchers.IO + handler) {
+            mainRepository.insertTvFavorite(tvPopularEntity)
         }
+    }
 
-        EspressoIdlingResource.idlingDecrement()
-        return tvDetailData
+    fun deleteTvFavorite(tvPopularEntity: TvPopularEntity) {
+        viewModelScope.launch(Dispatchers.IO + handler) {
+            mainRepository.deleteTvFavorite(tvPopularEntity)
+        }
     }
 }
+

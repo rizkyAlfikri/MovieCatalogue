@@ -58,7 +58,7 @@ class MoviePageHolder(override val containerView: View) : RecyclerView.ViewHolde
                 .apply(RequestOptions().placeholder(R.drawable.image_loading).error(R.drawable.image_error))
                 .into(img_poster)
 
-            setOnClickListener { listener(movie.id) }
+            setOnClickListener { listener(movie.idMovie) }
         }
     }
 }
