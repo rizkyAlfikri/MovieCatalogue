@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:elevation="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_genre"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/accentBackground"
+                android:textSize="16sp"
+                tools:text="Action, Fantasy, Romance, Drama, Comedy" />
+
+
+            <TextView
+                android:id="@+id/txt_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16sp"
+                android:ellipsize="end"
+                android:lineSpacingExtra="5dp"
+                android:maxLines="7"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="14sp"
+                tools:text="@string/title_dashboard" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/synopsis"
+                android:textColor="@color/colorTextTertiary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16sp"
+                android:layout_marginBottom="16dp"
+                android:ellipsize="end"
+                android:lineSpacingExtra="5dp"
+                android:maxLines="7"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="14sp"
+                tools:text="@string/overview" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:text="@string/duration"
+                android:textColor="@color/colorTextTertiary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_duration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16sp"
+                android:layout_marginBottom="16dp"
+                android:ellipsize="end"
+                android:lineSpacingExtra="5dp"
+                android:maxLines="7"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="14sp"
+                tools:text="2h 16 min" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:text="@string/status"
+                android:textColor="@color/colorTextTertiary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16sp"
+                android:layout_marginBottom="16dp"
+                android:ellipsize="end"
+                android:lineSpacingExtra="5dp"
+                android:maxLines="7"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="14sp"
+                tools:text="Release" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:text="@string/homepage"
+                android:textColor="@color/colorTextTertiary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_web"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16sp"
+                android:layout_marginBottom="16dp"
+                android:autoLink="all"
+                android:ellipsize="end"
+                android:lineSpacingExtra="5dp"
+                android:linksClickable="true"
+                android:maxLines="7"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="14sp"
+                tools:text="@string/web" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/similar_movies"
+                android:textColor="@color/colorTextTertiary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_similar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                tools:listitem="@layout/item_movie_similar" />
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+</androidx.core.widget.NestedScrollView>

@@ -28,5 +28,6 @@ data class MovieDetailResult(
     @SerializedName("title")
     var title: String,
     @SerializedName("vote_average")
-    var voteAverage: Double
+    var voteAverage: Double,
+    var keyVideo: String?
 )

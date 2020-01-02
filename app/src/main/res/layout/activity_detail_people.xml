@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,132 +7,154 @@
     android:orientation="vertical"
     tools:context="com.dicoding.picodiploma.moviecatalogue.ui.detailpeople.DetailPeopleActivity">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/img_profile"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:elevation="8dp"
-        app:civ_border_width="2dp"
-        app:civ_border_color="@color/colorPrimary"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="36dp"
-        tools:src="@drawable/image_test" />
-
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="136dp"
-        android:layout_marginEnd="16dp"
-        app:cardCornerRadius="12dp">
+        android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/txt_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="66dp"
-                android:textColor="@color/primary_text"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Kana Hanazawa" />
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:titleTextColor="@color/primary_text"
+                android:background="@color/colorTextTertiary"/>
 
-            <TextView
-                android:id="@+id/txt_gender"
-                android:layout_width="48dp"
-                android:layout_height="15dp"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/textSecond"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@+id/txt_name"
-                app:layout_constraintStart_toStartOf="@+id/txt_name"
-                app:layout_constraintTop_toBottomOf="@+id/txt_name"
-                tools:text="Female" />
+        </com.google.android.material.appbar.AppBarLayout>
 
-            <TextView
-                android:id="@+id/txt_birth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/textSecond"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@+id/txt_name"
-                app:layout_constraintStart_toStartOf="@+id/txt_name"
-                app:layout_constraintTop_toBottomOf="@+id/txt_gender"
-                tools:text="25-02-1989" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_profile"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="36dp"
+                android:elevation="8dp"
+                app:civ_border_color="@color/colorPrimary"
+                app:civ_border_width="2dp"
+                tools:src="@drawable/image_test" />
 
-            <TextView
-                android:id="@+id/txt_birth_place"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/textSecond"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@+id/txt_name"
-                app:layout_constraintHorizontal_bias="0.565"
-                app:layout_constraintStart_toStartOf="@+id/txt_name"
-                app:layout_constraintTop_toBottomOf="@+id/txt_birth"
-                tools:text="Tokyo Prefecture, Japan" />
-
-            <TextView
-                android:id="@+id/txt_bio"
-                android:layout_width="0dp"
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="136dp"
                 android:layout_marginEnd="16dp"
-                android:textColor="@color/textSecond"
-                android:textSize="14sp"
-                android:lineSpacingExtra="2dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_birth_place"
-                tools:text="@string/appbar_scrolling_view_behavior" />
+                app:cardCornerRadius="12dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:elevation="4dp"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/txt_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="66dp"
+                        android:textColor="@color/primary_text"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Kana Hanazawa" />
+
+                    <TextView
+                        android:id="@+id/txt_gender"
+                        android:layout_width="48dp"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/primary_text"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="@+id/txt_name"
+                        app:layout_constraintStart_toStartOf="@+id/txt_name"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_name"
+                        tools:text="Female" />
+
+                    <TextView
+                        android:id="@+id/txt_birth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/primary_text"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="@+id/txt_name"
+                        app:layout_constraintStart_toStartOf="@+id/txt_name"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_gender"
+                        tools:text="25-02-1989" />
 
 
-            <TextView
-                android:id="@+id/txt_web"
-                android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/txt_birth_place"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/primary_text"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="@+id/txt_name"
+                        app:layout_constraintHorizontal_bias="0.565"
+                        app:layout_constraintStart_toStartOf="@+id/txt_name"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_birth"
+                        tools:text="Tokyo Prefecture, Japan" />
+
+                    <TextView
+                        android:id="@+id/txt_bio"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:lineSpacingExtra="2dp"
+                        android:textColor="@color/primary_text"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_birth_place"
+                        tools:text="@string/appbar_scrolling_view_behavior" />
+
+
+                    <TextView
+                        android:id="@+id/txt_web"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:autoLink="all"
+                        android:gravity="center_horizontal"
+                        android:textColor="@color/primary_text"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_bio"
+                        app:layout_constraintVertical_bias="0.0"
+                        tools:text="http://www.hanazawakana-music.net" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:gravity="center_horizontal"
-                android:textColor="@color/textSecond"
-                android:textSize="14sp"
-                android:autoLink="all"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_bio"
-                app:layout_constraintVertical_bias="0.0"
-                tools:text="http://www.hanazawakana-music.net" />
+                android:layout_gravity="center"
+                android:elevation="8dp" />
 
+        </FrameLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
-
-
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:elevation="8dp" />
-
-    </FrameLayout>
 </ScrollView>

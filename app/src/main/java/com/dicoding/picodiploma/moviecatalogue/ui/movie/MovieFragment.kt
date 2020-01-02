@@ -17,14 +17,12 @@ import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.movieent
 import com.dicoding.picodiploma.moviecatalogue.ui.detailmovie.DetailMovieActivity
 import com.dicoding.picodiploma.moviecatalogue.ui.detailmovie.DetailMovieActivity.Companion.EXTRA_MOVIE
 import com.dicoding.picodiploma.moviecatalogue.ui.search.SearchActivity
-import com.dicoding.picodiploma.moviecatalogue.utils.Config
 import com.dicoding.picodiploma.moviecatalogue.utils.MyAdapterClickListener
 import com.dicoding.picodiploma.moviecatalogue.utils.invisible
 import com.dicoding.picodiploma.moviecatalogue.utils.visible
 import com.dicoding.picodiploma.moviecatalogue.viewmodels.ViewModelFactory
 import com.dicoding.picodiploma.moviecatalogue.vo.Status
 import kotlinx.android.synthetic.main.fragment_movie.*
-import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.toast
 
@@ -73,16 +71,16 @@ class MovieFragment : Fragment(), MyAdapterClickListener<MoviePopularEntity> {
             android.R.layout.simple_spinner_dropdown_item,
             movieSpinner
         )
-        spinner.adapter = spinnerAdapter
-        spinner.setSelection(mainViewModel.movieSpinnerPosition)
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        movie_spinner.adapter = spinnerAdapter
+        movie_spinner.setSelection(mainViewModel.movieSpinnerPosition)
+        movie_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
 
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                sortBy = spinner.selectedItem.toString()
-                mainViewModel.movieSpinnerPosition = spinner.selectedItemPosition
+                sortBy = movie_spinner.selectedItem.toString()
+                mainViewModel.movieSpinnerPosition = movie_spinner.selectedItemPosition
                 mainViewModel.setMovieSpinner()
             }
         }
@@ -106,7 +104,7 @@ class MovieFragment : Fragment(), MyAdapterClickListener<MoviePopularEntity> {
 
                 Status.ERROR -> {
                     progress_bar.invisible()
-                    toast("Terjadi kesalahan")
+                    toast(getString(R.string.failed))
                 }
             }
         })
@@ -116,11 +114,11 @@ class MovieFragment : Fragment(), MyAdapterClickListener<MoviePopularEntity> {
         if (state) {
             mainViewModel.insertMovieFavorite(data)
             rv_movie.adapter?.notifyDataSetChanged()
-            toast("${data.title} has been added to favorite list")
+            toast("${data.title} ${getString(R.string.has_been_added)}")
         } else {
             mainViewModel.deleteMovieFavoriteById(data.idMovie)
             rv_movie.adapter?.notifyDataSetChanged()
-            toast("${data.title} has been remove from favorite list")
+            toast("${data.title} ${getString(R.string.has_been_remove)}")
         }
     }
 

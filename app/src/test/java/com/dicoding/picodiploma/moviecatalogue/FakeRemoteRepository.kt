@@ -5,14 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.ApiResponse
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.RemoteRepository
+import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.movieresponse.MovieDetailWithInfoResult
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.movieresponse.MovieResultWithGenre
-import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.movieresponse.moviedetail.MovieDetailResult
+import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.peopleresponse.PeopleDetailResult
+import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.searchresponse.SearchWithGenreResult
+import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.tvshowresponse.TvDetailWithInfoResult
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.tvshowresponse.TvResultWithGenre
-import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.tvshowresponse.tvshowdetail.TvDetailResult
 import com.dicoding.picodiploma.moviecatalogue.network.ApiService
 import kotlinx.coroutines.*
-import java.lang.Exception
-import java.lang.NullPointerException
 
 class FakeRemoteRepository (private val apiService: ApiService, private val apiKey: String) {
 
@@ -33,13 +33,13 @@ class FakeRemoteRepository (private val apiService: ApiService, private val apiK
     }
 
 
-    fun getPopularMovieRepo(): MutableLiveData<ApiResponse<MovieResultWithGenre>> {
+    fun getPopularMovieRepo(sortBy: String): MutableLiveData<ApiResponse<MovieResultWithGenre>> {
         val resultMoviePopular = MutableLiveData<ApiResponse<MovieResultWithGenre>>()
 
         CoroutineScope(Dispatchers.IO + exception).launch {
 
             try {
-                val listPopularMovie = async { apiService.getMoviePopularApi(apiKey) }
+                val listPopularMovie = async { apiService.getMoviePopularApi(sortBy, apiKey) }
                 val listGenreMovie = async { apiService.getMovieGenreApi(apiKey) }
 
                 val movieWithGenre =
@@ -59,13 +59,27 @@ class FakeRemoteRepository (private val apiService: ApiService, private val apiK
         return resultMoviePopular
     }
 
-    fun getDetailMovieRepo(idMovie: Int): LiveData<ApiResponse<MovieDetailResult>> {
-        val resultMovieDetail = MutableLiveData<ApiResponse<MovieDetailResult>>()
+    fun getDetailMovieRepo(idMovie: Int): LiveData<ApiResponse<MovieDetailWithInfoResult>> {
+        val resultMovieDetail = MutableLiveData<ApiResponse<MovieDetailWithInfoResult>>()
         CoroutineScope(Dispatchers.IO + exception).launch {
 
             try {
+                val movieDetailResult = async { apiService.getMovieDetailApi(idMovie, apiKey) }
+                val movieVideoResult = async { apiService.getMovieTrailerApi(idMovie, apiKey) }
+                val movieReviewResult = async { apiService.getMovieReviewApi(idMovie, apiKey) }
+                val movieSimilarResult = async { apiService.getMovieSimilarApi(idMovie, apiKey) }
+                val movieImagesResult = async { apiService.getMovieImageApi(idMovie, apiKey) }
+                movieDetailResult.await().keyVideo = movieVideoResult.await().results.first().key
+
                 resultMovieDetail.postValue(
-                    ApiResponse.success(apiService.getMovieDetailApi(idMovie, apiKey))
+                    ApiResponse.success(
+                        MovieDetailWithInfoResult(
+                            movieDetailResult.await(),
+                            movieReviewResult.await(),
+                            movieImagesResult.await(),
+                            movieSimilarResult.await().results
+                        )
+                    )
                 )
             } catch (e: Exception) {
                 ApiResponse.error("${e.message}", null)
@@ -77,18 +91,17 @@ class FakeRemoteRepository (private val apiService: ApiService, private val apiK
         return resultMovieDetail
     }
 
-
-    fun getPopularTvRepo(): LiveData<ApiResponse<TvResultWithGenre>> {
+    fun getPopularTvRepo(sortBy: String): LiveData<ApiResponse<TvResultWithGenre>> {
         val resultTvPopular = MutableLiveData<ApiResponse<TvResultWithGenre>>()
 
         CoroutineScope(Dispatchers.IO + exception).launch {
-            val tvPopularResult = async { apiService.getTvPopularApi(apiKey) }
-            val tvGenreResult = async { apiService.getTvGenreApi(apiKey) }
-
-            val tvResultWithGenre =
-                TvResultWithGenre(tvPopularResult.await().results, tvGenreResult.await().genres)
 
             try {
+                val tvPopularResult = async { apiService.getTvPopularApi(sortBy, apiKey) }
+                val tvGenreResult = async { apiService.getTvGenreApi(apiKey) }
+
+                val tvResultWithGenre =
+                    TvResultWithGenre(tvPopularResult.await().results, tvGenreResult.await().genres)
                 resultTvPopular.postValue(ApiResponse.success(tvResultWithGenre))
             } catch (e: Exception) {
                 resultTvPopular.postValue(ApiResponse.error("${e.message}", null))
@@ -101,14 +114,29 @@ class FakeRemoteRepository (private val apiService: ApiService, private val apiK
 
     }
 
-    fun getDetailTvRepo(idTv: Int): LiveData<ApiResponse<TvDetailResult>> {
-        val resultTvDetail = MutableLiveData<ApiResponse<TvDetailResult>>()
+    fun getDetailTvRepo(idTv: Int): LiveData<ApiResponse<TvDetailWithInfoResult>> {
+        val resultTvDetail = MutableLiveData<ApiResponse<TvDetailWithInfoResult>>()
 
         CoroutineScope(Dispatchers.IO + exception).launch {
-            val tvDetailResult = apiService.getTvDetailApi(idTv, apiKey)
+            val tvDetailResult = async { apiService.getTvDetailApi(idTv, apiKey) }
+            val tvVideoResult = async { apiService.getTvVideoApi(idTv, apiKey) }
+            val tvSimilarResult = async { apiService.getTvSimilarApi(idTv, apiKey) }
+            val tvReviewResult = async { apiService.getTvReviewApi(idTv, apiKey) }
+            val tvImageResult = async { apiService.getTvImageApi(idTv, apiKey) }
+
+            tvDetailResult.await().keyVideo = tvVideoResult.await().results.first().key
 
             try {
-                resultTvDetail.postValue(ApiResponse.success(tvDetailResult))
+                resultTvDetail.postValue(
+                    ApiResponse.success(
+                        TvDetailWithInfoResult(
+                            tvDetailResult.await(),
+                            tvReviewResult.await(),
+                            tvImageResult.await(),
+                            tvSimilarResult.await().results
+                        )
+                    )
+                )
             } catch (e: Exception) {
                 resultTvDetail.postValue(ApiResponse.error("${e.message}", null))
             } catch (e: NullPointerException) {
@@ -117,5 +145,51 @@ class FakeRemoteRepository (private val apiService: ApiService, private val apiK
         }
 
         return resultTvDetail
+    }
+
+    fun getSearchRepo(query: String): LiveData<ApiResponse<SearchWithGenreResult>> {
+        val resultSearch = MutableLiveData<ApiResponse<SearchWithGenreResult>>()
+
+        CoroutineScope(Dispatchers.IO + exception).launch {
+            val searchData = async { apiService.getSearchApi(query, apiKey) }
+            val movieGenreData = async { apiService.getMovieGenreApi(apiKey) }
+            val tvGenreData = async { apiService.getTvGenreApi(apiKey) }
+            try {
+                resultSearch.postValue(
+                    ApiResponse.success(
+                        SearchWithGenreResult(
+                            searchData.await().results,
+                            movieGenreData.await().genres,
+                            tvGenreData.await().genres
+                        )
+                    )
+                )
+            } catch (e: Exception) {
+                resultSearch.postValue(ApiResponse.error("${e.message}", null))
+            } catch (e: NullPointerException) {
+                resultSearch.postValue(ApiResponse.empty("${e.message}", null))
+            }
+        }
+
+        return resultSearch
+    }
+
+    fun getDetailPersonRepo(idPerson: Int): LiveData<ApiResponse<PeopleDetailResult>> {
+        val resultDetailPeople = MutableLiveData<ApiResponse<PeopleDetailResult>>()
+
+        CoroutineScope(Dispatchers.IO + exception).launch {
+            val peopleDetail = apiService.getPeopleDetail(idPerson, apiKey)
+
+            try {
+                resultDetailPeople.postValue(ApiResponse.success(peopleDetail))
+            } catch (e: Exception) {
+                resultDetailPeople.postValue(ApiResponse.error("${e.message}", null))
+            } catch (e: NullPointerException) {
+                resultDetailPeople.postValue(ApiResponse.empty("${e.message}", null))
+            }
+        }
+
+        return resultDetailPeople
+
     }
 }

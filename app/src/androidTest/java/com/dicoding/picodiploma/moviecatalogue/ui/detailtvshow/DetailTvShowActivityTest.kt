@@ -60,25 +60,28 @@ class DetailTvShowActivityTest {
 
     @Test
     @OkReplay(tape = "instrumental_test_load_detail_tv_test", mode = TapeMode.READ_ONLY)
-    fun loadDetailTvTest() {
+    fun load_detail_tv_and_click_watchlist_button() {
         onView(withId(R.id.navigation_tvshow))
             .check(matches(isDisplayed()))
         onView(withId(R.id.navigation_tvshow)).perform(click())
         onView(withId(R.id.rv_tvshow))
             .check(matches(isDisplayed()))
-        Thread.sleep(4000)
         onView(withId(R.id.rv_tvshow))
             .check(RecyclerViewItemCountAssertion(20))
         onView(withId(R.id.rv_tvshow)).perform(
             RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                1,
+                0,
                 click()
             )
         )
 
-        onView(withId(R.id.txt_title))
-            .check(matches(isDisplayed()))
-        onView(withId(R.id.txt_title))
-            .check(matches(withText("Rick and Morty")))
+        onView(withId(R.id.txt_tv_detail_title)).check(matches(isDisplayed()))
+        onView(withId(R.id.txt_tv_detail_title)).check(matches(withText("The Mandalorian")))
+
+        onView(withId(R.id.btn_watchlist)).check(matches(isDisplayed()))
+
+        onView(withText(R.string.add_to_favorite)).check(matches(isDisplayed()))
+        onView(withId(R.id.btn_watchlist)).perform(click())
+        onView(withText(R.string.remove_from_favorite)).check(matches(isDisplayed()))
     }
 }

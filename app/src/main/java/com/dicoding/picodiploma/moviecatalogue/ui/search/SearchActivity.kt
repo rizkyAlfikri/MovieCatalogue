@@ -171,7 +171,7 @@ class SearchActivity : AppCompatActivity() {
 
                 ERROR -> {
                     progress_bar.invisible()
-                    toast("Error, please refresh application")
+                    toast(getString(R.string.failed))
                 }
             }
         })

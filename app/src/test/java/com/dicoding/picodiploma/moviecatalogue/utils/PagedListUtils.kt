@@ -1,9 +1,6 @@
 package com.dicoding.picodiploma.moviecatalogue.utils
 
 import androidx.paging.PagedList
-import org.mockito.ArgumentMatchers
-import org.mockito.ArgumentMatchers.*
-import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.stubbing.Answer
 

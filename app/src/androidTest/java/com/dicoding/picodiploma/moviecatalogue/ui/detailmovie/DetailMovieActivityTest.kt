@@ -60,7 +60,7 @@ class DetailMovieActivityTest {
 
     @Test
     @OkReplay(tape = "instrumental_test_load_detail_movie_test", mode = TapeMode.READ_ONLY)
-    fun loadDetailMovieTest() {
+    fun load_detail_movie_and_click_watchlist_button() {
         onView(withId(R.id.navigation_movie))
             .check(matches(isDisplayed()))
         onView(withId(R.id.navigation_movie)).perform(click())
@@ -75,8 +75,11 @@ class DetailMovieActivityTest {
             )
         )
 
-        onView(withId(R.id.txt_title)).check(matches(isDisplayed()))
-        onView(withId(R.id.txt_title)).check(matches(withText("Frozen II")))
+        onView(withId(R.id.txt_detail_movie_title)).check(matches(isDisplayed()))
+        onView(withId(R.id.btn_watchlist_movie)).check(matches(isDisplayed()))
 
+        onView(withText(R.string.add_to_favorite)).check(matches(isDisplayed()))
+        onView(withId(R.id.btn_watchlist_movie)).perform(click())
+        onView(withText(R.string.remove_from_favorite)).check(matches(isDisplayed()))
     }
 }

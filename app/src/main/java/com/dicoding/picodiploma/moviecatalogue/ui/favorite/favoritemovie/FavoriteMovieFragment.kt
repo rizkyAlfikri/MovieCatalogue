@@ -87,7 +87,7 @@ class FavoriteMovieFragment : Fragment(), MyAdapterClickListener<MoviePopularEnt
 
                 Status.ERROR -> {
                     progress_bar.invisible()
-                    toast("Error, please refresh application")
+                    toast(getString(R.string.failed))
                 }
 
             }
@@ -97,8 +97,8 @@ class FavoriteMovieFragment : Fragment(), MyAdapterClickListener<MoviePopularEnt
     override fun onItemClicked(data: MoviePopularEntity, state: Boolean) {
         favoriteViewModel.deleteMovieFavoriteById(data.idMovie)
         rv_movie_favorite.snackbar(
-            "Are you sure want to delete this ?",
-            "Undo"
+            getString(R.string.are_sure_delete),
+            getString(R.string.undo)
         ) {
             data.isFavorite = true
             favoriteViewModel.insertMovieFavorite(data)

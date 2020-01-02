@@ -1,9 +1,9 @@
 package com.dicoding.picodiploma.moviecatalogue.ui.movie
 
-import androidx.test.espresso.Espresso.*
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.action.ViewActions.*
-import androidx.test.espresso.assertion.ViewAssertions.*
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
@@ -58,10 +58,21 @@ class MovieFragmentTest {
 
     @Test
     @OkReplay(tape = "instrumental_test_load_popular_movie_test", mode = TapeMode.READ_ONLY)
-    fun load_popular_movie() {
+    fun load_movie_and_click_spinner_for_sorting_movie() {
         onView(withId(R.id.navigation_movie)).check(matches(isDisplayed()))
         onView(withId(R.id.navigation_movie)).perform(click())
         onView(withId(R.id.rv_movie)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_movie)).check(RecyclerViewItemCountAssertion(20))
+
+        onView(withId(R.id.movie_spinner)).check(matches(isDisplayed()))
+        onView(withId(R.id.movie_spinner)).perform(click())
+        onView(withText("Top Rated Movies")).check(matches(isDisplayed())).perform(click())
+        onView(withId(R.id.rv_movie)).check(RecyclerViewItemCountAssertion(20))
+
+        onView(withId(R.id.movie_spinner)).check(matches(isDisplayed()))
+        onView(withId(R.id.movie_spinner)).perform(click())
+        onView(withText("Upcoming Movies")).check(matches(isDisplayed())).perform(click())
+        onView(withId(R.id.rv_movie)).check(RecyclerViewItemCountAssertion(20))
+
     }
 }

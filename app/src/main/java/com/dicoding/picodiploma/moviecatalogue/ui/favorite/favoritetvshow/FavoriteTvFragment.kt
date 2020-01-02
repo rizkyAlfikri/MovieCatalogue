@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.picodiploma.moviecatalogue.R
-import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.tvPopularEntity.TvPopularEntity
+import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.tvpopularentity.TvPopularEntity
 import com.dicoding.picodiploma.moviecatalogue.ui.detailtvshow.DetailTvShowActivity
 import com.dicoding.picodiploma.moviecatalogue.ui.detailtvshow.DetailTvShowActivity.Companion.EXTRA_TV
 import com.dicoding.picodiploma.moviecatalogue.ui.favorite.FavoriteViewModel
@@ -83,7 +83,7 @@ class FavoriteTvFragment : Fragment(), MyAdapterClickListener<TvPopularEntity> {
 
                 ERROR -> {
                     progress_bar.invisible()
-                    toast("Error, please refresh application")
+                    toast(getString(R.string.failed))
                 }
             }
         })
@@ -92,8 +92,8 @@ class FavoriteTvFragment : Fragment(), MyAdapterClickListener<TvPopularEntity> {
     override fun onItemClicked(data: TvPopularEntity, state: Boolean) {
         favoriteViewModel.deleteTvFavoriteById(data.idTv)
         rv_tv_favorite.snackbar(
-            "Are sure want to delete this ?",
-            "Undo"
+            getString(R.string.are_sure_delete),
+            getString(R.string.undo)
         ) {
             data.isFavorite = true
             favoriteViewModel.insertTvFavorite(data)

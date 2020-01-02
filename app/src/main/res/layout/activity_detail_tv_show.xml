@@ -5,31 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/content_container"
+    android:background="@color/backgroundColor"
     android:theme="@style/AppTheme.Translucent"
     tools:context=".ui.detailtvshow.DetailTvShowActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="440dp"
+        android:layout_height="500dp"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.PopupOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapse_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:layout_scrollFlags="scroll|snap"
-            app:statusBarScrim="@color/backgroundColor">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:titleTextColor="@android:color/white"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-
+            app:collapsedTitleGravity="center_vertical"
+            app:contentScrim="@color/backgroundColor"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:statusBarScrim="@color/backgroundColor"
+            app:titleEnabled="true">
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -41,159 +37,219 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    tools:src="@drawable/image_banner"
-                    tools:ignore="ContentDescription" />
+                    tools:ignore="ContentDescription"
+                    tools:src="@drawable/image_banner" />
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="256dp"
                     android:layout_gravity="bottom"
                     android:background="@drawable/gradient" />
 
+
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:elevation="4dp"
+                    android:layout_height="280dp"
                     android:layout_gravity="bottom"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
-                    app:cardCornerRadius="12sp">
+                    android:layout_marginBottom="72dp"
+                    android:elevation="4dp"
+                    app:cardCornerRadius="12sp" />
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="bottom">
 
-                        <View
-                            android:id="@+id/view"
-                            android:layout_width="1dp"
-                            android:layout_height="1dp"
-                            android:backgroundTint="@android:color/transparent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.43"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="72dp"
+                    android:elevation="4dp">
 
-                        <TextView
-                            android:id="@+id/txt_title"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="24dp"
-                            android:layout_marginEnd="8dp"
-                            android:textColor="@color/primary_text"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/view"
+                    <View
+                        android:id="@+id/view3"
+                        android:layout_width="0.5dp"
+                        android:layout_height="0.5dp"
+                        android:background="@color/primary_text"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.78" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView2"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="24dp"
+                        android:elevation="8dp"
+                        app:cardCornerRadius="8dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/view3"
+                        app:layout_constraintEnd_toStartOf="@+id/view3"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/img_poster"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY"
                             app:layout_constraintTop_toTopOf="parent"
-                            tools:text="Your Name." />
+                            tools:ignore="ContentDescription"
+                            tools:src="@drawable/image_test" />
 
-                        <TextView
-                            android:id="@+id/txt_release"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:textColor="@color/textSecond"
-                            android:textSize="14sp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="@+id/txt_title"
-                            app:layout_constraintTop_toBottomOf="@+id/txt_title"
-                            tools:text="2017" />
+                    </androidx.cardview.widget.CardView>
 
-                        <androidx.appcompat.widget.AppCompatRatingBar
-                            android:id="@+id/rate_bar"
-                            style="@style/Widget.AppCompat.RatingBar.Small"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:numStars="5"
-                            android:stepSize="0.5"
-                            android:theme="@style/RatingBar"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="@+id/txt_release"
-                            app:layout_constraintTop_toBottomOf="@+id/txt_release" />
 
-                        <ProgressBar
-                            android:id="@+id/progress_bar"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/txt_tv_detail_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="36dp"
+                        android:layout_marginEnd="16dp"
+                        android:textColor="@color/primary_text"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/cardView2"
+                        app:layout_constraintTop_toTopOf="@+id/cardView2"
+                        tools:text="Your Name." />
 
-                        <LinearLayout
+                    <TextView
+                        android:id="@+id/txt_release"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:textColor="@color/textSecond"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/txt_tv_detail_title"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_tv_detail_title"
+                        tools:text="2017" />
+
+                    <androidx.appcompat.widget.AppCompatRatingBar
+                        android:id="@+id/rate_bar"
+                        style="@style/Widget.AppCompat.RatingBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:numStars="5"
+                        android:stepSize="0.5"
+                        android:theme="@style/RatingBar"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/txt_release"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_release" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:elevation="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:id="@+id/linear"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cardView2"
+                        app:layout_constraintVertical_bias="1.0">
+
+
+                        <Button
+                            android:id="@+id/btn_trailer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/progress_bar">
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/rounded_shape"
+                            android:drawableStart="@drawable/ic_play_arrow_black_24dp"
+                            android:elevation="8dp"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:text="@string/play_trailer"
+                            android:textColor="@color/colorTextTertiary"
+                            tools:ignore="ButtonStyle" />
+
+                        <Button
+                            android:id="@+id/btn_watchlist"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/rounded_shape_white"
+                            android:drawableStart="@drawable/ic_add_black_24dp"
+                            android:elevation="8dp"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:textColor="@color/primary_text"
+                            tools:ignore="ButtonStyle"
+                            tools:text="@string/add_to_favorite" />
 
 
-                            <Button
-                                android:id="@+id/btn_trailer"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginEnd="8dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/rounded_shape"
-                                android:drawableStart="@drawable/ic_play_arrow_black_24dp"
-                                android:elevation="8dp"
-                                android:paddingLeft="20dp"
-                                android:paddingRight="20dp"
-                                android:text="@string/play_trailer"
-                                android:textColor="@color/colorTextTertiary"
-                                tools:ignore="ButtonStyle" />
+                    </LinearLayout>
 
-                            <Button
-                                android:id="@+id/btn_watchlist"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:layout_marginEnd="16dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/rounded_shape_white"
-                                android:drawableStart="@drawable/ic_add_black_24dp"
-                                android:elevation="8dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:text="@string/add_to_favorite"
-                                android:textColor="@color/primary_text"
-                                tools:ignore="ButtonStyle" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        </LinearLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:elevation="8dp"
-                    app:cardCornerRadius="8dp"
-                    android:layout_marginStart="30dp">
-
-                    <ImageView
-                        android:id="@+id/img_poster"
-                        android:layout_width="150dp"
-                        android:layout_height="200dp"
-                        android:scaleType="fitXY"
-                        tools:ignore="ContentDescription"
-                        tools:src="@drawable/image_test" />
-
-                </androidx.cardview.widget.CardView>
             </FrameLayout>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="112dp"
+                android:gravity="top"
+                app:titleMarginStart="16dp"
+                android:minWidth="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:title="@string/app_name"
+                app:titleMarginBottom="12dp"/>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_gravity="bottom"
+                android:background="?attr/colorPrimary"
+                android:backgroundTint="@color/backgroundColor"
+                android:foregroundGravity="bottom"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="@color/accentBackground"
+                app:tabTextColor="@color/colorTextTertiary" />
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_gravity="bottom"
+                android:layout_height="0.5dp"
+                android:background="@color/textSecond" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_activity_tv_detail" />
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/backgroundColor"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

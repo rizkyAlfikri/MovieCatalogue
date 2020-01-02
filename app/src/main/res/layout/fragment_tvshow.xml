@@ -55,7 +55,7 @@
             android:layout_height="wrap_content">
 
             <Spinner
-                android:id="@+id/spinner"
+                android:id="@+id/tv_spinner"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_marginStart="16dp"
@@ -73,7 +73,7 @@
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinner"
+                app:layout_constraintTop_toBottomOf="@+id/tv_spinner"
                 tools:listitem="@layout/item_movie_holder" />
 
 

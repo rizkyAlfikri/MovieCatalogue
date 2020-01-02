@@ -6,15 +6,13 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dicoding.picodiploma.moviecatalogue.data.source.MainRepository
-import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.tvPopularEntity.TvPopularEntity
-import com.dicoding.picodiploma.moviecatalogue.utils.CoroutineContextProvider
+import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.tvpopularentity.TvPopularEntity
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DetailTvViewModel(
-    private val mainRepository: MainRepository,
-    private val context: CoroutineContextProvider = CoroutineContextProvider()
+    private val mainRepository: MainRepository
 ) : ViewModel() {
 
     private val handler = CoroutineExceptionHandler { _, throwable ->

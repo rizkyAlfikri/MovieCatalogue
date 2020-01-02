@@ -2,13 +2,12 @@ package com.dicoding.picodiploma.moviecatalogue.data.source
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
-import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.movieentity.moviedetailentity.MovieDetailEntity
+import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.movieentity.MovieDetailWithInfoEntity
 import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.movieentity.moviepopularentity.MoviePopularEntity
 import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.peopleentity.PeopleDetailEntity
-import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.searchentity.SearchEntity
 import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.searchentity.SearchWithMovieTvPeopleEntity
-import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.tvDetailEntity.TvDetailEntity
-import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.tvPopularEntity.TvPopularEntity
+import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.TvDetailWithInfoEntity
+import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.tvpopularentity.TvPopularEntity
 import com.dicoding.picodiploma.moviecatalogue.vo.Resource
 
 interface MainDataSource {
@@ -18,7 +17,7 @@ interface MainDataSource {
 
     fun getPopularMovieData(sortBy: String): LiveData<Resource<List<MoviePopularEntity>>>
 
-    fun getDetailMovieData(idMovie: Int): LiveData<Resource<MovieDetailEntity>>
+    fun getDetailMovieData(idMovie: Int): LiveData<Resource<MovieDetailWithInfoEntity>>
 
     fun getFavoriteMovieData(): LiveData<Resource<PagedList<MoviePopularEntity>>>
 
@@ -34,11 +33,9 @@ interface MainDataSource {
 
     fun getPopularTvData(sortBy: String): LiveData<Resource<List<TvPopularEntity>>>
 
-    fun getDetailTvData(idTv: Int): LiveData<Resource<TvDetailEntity>>
+    fun getDetailTvData(idTv: Int): LiveData<Resource<TvDetailWithInfoEntity>>
 
     fun getFavoriteTvData(): LiveData<Resource<PagedList<TvPopularEntity>>>
-
-    fun getTvDetailById(id: Int): LiveData<TvDetailEntity>
 
     fun getTvFavoriteById(id: Int): LiveData<TvPopularEntity>
 

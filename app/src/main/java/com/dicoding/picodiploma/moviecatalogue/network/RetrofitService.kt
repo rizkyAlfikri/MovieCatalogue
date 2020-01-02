@@ -2,8 +2,6 @@ package com.dicoding.picodiploma.moviecatalogue.network
 
 import com.dicoding.picodiploma.moviecatalogue.utils.Config
 import com.google.gson.GsonBuilder
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import com.jakewharton.rxbinding.widget.RxAdapter
 import okhttp3.OkHttpClient
 import okreplay.OkReplayInterceptor
 import retrofit2.Retrofit

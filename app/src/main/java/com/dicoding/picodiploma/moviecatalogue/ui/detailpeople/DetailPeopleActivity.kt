@@ -32,6 +32,10 @@ class DetailPeopleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_people)
 
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(true)
+
         val peopleId = intent.getIntExtra(EXTRA_PEOPLE, 0)
 
         peopleViewModel = obtainViewModel(this)
@@ -67,7 +71,7 @@ class DetailPeopleActivity : AppCompatActivity() {
 
                 ERROR -> {
                     progress_bar.invisible()
-                    toast("Failed request data to network, please try again")
+                    toast(getString(R.string.failed))
                 }
 
             }

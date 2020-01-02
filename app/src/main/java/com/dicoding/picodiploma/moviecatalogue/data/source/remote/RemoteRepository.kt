@@ -3,16 +3,15 @@ package com.dicoding.picodiploma.moviecatalogue.data.source.remote
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.movieresponse.MovieDetailWithInfoResult
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.movieresponse.MovieResultWithGenre
-import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.movieresponse.moviedetail.MovieDetailResult
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.peopleresponse.PeopleDetailResult
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.searchresponse.SearchWithGenreResult
+import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.tvshowresponse.TvDetailWithInfoResult
 import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.tvshowresponse.TvResultWithGenre
-import com.dicoding.picodiploma.moviecatalogue.data.source.remote.response.tvshowresponse.tvshowdetail.TvDetailResult
 import com.dicoding.picodiploma.moviecatalogue.network.ApiService
+import com.dicoding.picodiploma.moviecatalogue.utils.EspressoIdlingResource
 import kotlinx.coroutines.*
-import java.lang.Exception
-import java.lang.NullPointerException
 
 class RemoteRepository private constructor(
     private val apiService: ApiService,
@@ -42,6 +41,8 @@ class RemoteRepository private constructor(
     fun getPopularMovieRepo(sortBy: String): MutableLiveData<ApiResponse<MovieResultWithGenre>> {
         val resultMoviePopular = MutableLiveData<ApiResponse<MovieResultWithGenre>>()
 
+        EspressoIdlingResource.idlingIncrement()
+
         CoroutineScope(Dispatchers.IO + exception).launch {
 
             try {
@@ -60,34 +61,54 @@ class RemoteRepository private constructor(
             } catch (e: NullPointerException) {
                 resultMoviePopular.postValue(ApiResponse.empty("${e.message}", null))
             }
+
+            EspressoIdlingResource.idlingDecrement()
         }
 
         return resultMoviePopular
     }
 
-    fun getDetailMovieRepo(idMovie: Int): LiveData<ApiResponse<MovieDetailResult>> {
-        val resultMovieDetail = MutableLiveData<ApiResponse<MovieDetailResult>>()
+    fun getDetailMovieRepo(idMovie: Int): LiveData<ApiResponse<MovieDetailWithInfoResult>> {
+        val resultMovieDetail = MutableLiveData<ApiResponse<MovieDetailWithInfoResult>>()
+
+        EspressoIdlingResource.idlingIncrement()
+
         CoroutineScope(Dispatchers.IO + exception).launch {
 
             try {
-                val movieDetailResult = apiService.getMovieDetailApi(idMovie, apiKey)
+                val movieDetailResult = async { apiService.getMovieDetailApi(idMovie, apiKey) }
+                val movieVideoResult = async { apiService.getMovieTrailerApi(idMovie, apiKey) }
+                val movieReviewResult = async { apiService.getMovieReviewApi(idMovie, apiKey) }
+                val movieSimilarResult = async { apiService.getMovieSimilarApi(idMovie, apiKey) }
+                val movieImagesResult = async { apiService.getMovieImageApi(idMovie, apiKey) }
+                movieDetailResult.await().keyVideo = movieVideoResult.await().results.first().key
 
                 resultMovieDetail.postValue(
-                    ApiResponse.success(movieDetailResult)
+                    ApiResponse.success(
+                        MovieDetailWithInfoResult(
+                            movieDetailResult.await(),
+                            movieReviewResult.await(),
+                            movieImagesResult.await(),
+                            movieSimilarResult.await().results
+                        )
+                    )
                 )
             } catch (e: Exception) {
                 ApiResponse.error("${e.message}", null)
             } catch (e: NullPointerException) {
                 ApiResponse.empty("${e.message}", null)
             }
+
+            EspressoIdlingResource.idlingDecrement()
         }
 
         return resultMovieDetail
     }
 
-
     fun getPopularTvRepo(sortBy: String): LiveData<ApiResponse<TvResultWithGenre>> {
         val resultTvPopular = MutableLiveData<ApiResponse<TvResultWithGenre>>()
+
+        EspressoIdlingResource.idlingIncrement()
 
         CoroutineScope(Dispatchers.IO + exception).launch {
 
@@ -103,25 +124,47 @@ class RemoteRepository private constructor(
             } catch (e: NullPointerException) {
                 resultTvPopular.postValue(ApiResponse.error("${e.message}", null))
             }
+
+            EspressoIdlingResource.idlingDecrement()
         }
 
         return resultTvPopular
 
     }
 
-    fun getDetailTvRepo(idTv: Int): LiveData<ApiResponse<TvDetailResult>> {
-        val resultTvDetail = MutableLiveData<ApiResponse<TvDetailResult>>()
+    fun getDetailTvRepo(idTv: Int): LiveData<ApiResponse<TvDetailWithInfoResult>> {
+        val resultTvDetail = MutableLiveData<ApiResponse<TvDetailWithInfoResult>>()
+
+        EspressoIdlingResource.idlingIncrement()
 
         CoroutineScope(Dispatchers.IO + exception).launch {
-            val tvDetailResult = apiService.getTvDetailApi(idTv, apiKey)
+            val tvDetailResult = async { apiService.getTvDetailApi(idTv, apiKey) }
+            val tvVideoResult = async { apiService.getTvVideoApi(idTv, apiKey) }
+            val tvSimilarResult = async { apiService.getTvSimilarApi(idTv, apiKey) }
+            val tvReviewResult = async { apiService.getTvReviewApi(idTv, apiKey) }
+            val tvImageResult = async { apiService.getTvImageApi(idTv, apiKey) }
+
+            tvDetailResult.await().keyVideo = tvVideoResult.await().results.first().key
 
             try {
-                resultTvDetail.postValue(ApiResponse.success(tvDetailResult))
+                resultTvDetail.postValue(
+                    ApiResponse.success(
+                        TvDetailWithInfoResult(
+                            tvDetailResult.await(),
+                            tvReviewResult.await(),
+                            tvImageResult.await(),
+                            tvSimilarResult.await().results
+                        )
+                    )
+                )
             } catch (e: Exception) {
                 resultTvDetail.postValue(ApiResponse.error("${e.message}", null))
             } catch (e: NullPointerException) {
                 resultTvDetail.postValue(ApiResponse.empty("${e.message}", null))
             }
+
+            EspressoIdlingResource.idlingDecrement()
+
         }
 
         return resultTvDetail
@@ -129,6 +172,8 @@ class RemoteRepository private constructor(
 
     fun getSearchRepo(query: String): LiveData<ApiResponse<SearchWithGenreResult>> {
         val resultSearch = MutableLiveData<ApiResponse<SearchWithGenreResult>>()
+
+        EspressoIdlingResource.idlingIncrement()
 
         CoroutineScope(Dispatchers.IO + exception).launch {
             val searchData = async { apiService.getSearchApi(query, apiKey) }
@@ -149,6 +194,9 @@ class RemoteRepository private constructor(
             } catch (e: NullPointerException) {
                 resultSearch.postValue(ApiResponse.empty("${e.message}", null))
             }
+
+            EspressoIdlingResource.idlingDecrement()
+
         }
 
         return resultSearch
@@ -156,6 +204,8 @@ class RemoteRepository private constructor(
 
     fun getDetailPersonRepo(idPerson: Int): LiveData<ApiResponse<PeopleDetailResult>> {
         val resultDetailPeople = MutableLiveData<ApiResponse<PeopleDetailResult>>()
+
+        EspressoIdlingResource.idlingIncrement()
 
         CoroutineScope(Dispatchers.IO + exception).launch {
             val peopleDetail = apiService.getPeopleDetail(idPerson, apiKey)
@@ -167,6 +217,8 @@ class RemoteRepository private constructor(
             } catch (e: NullPointerException) {
                 resultDetailPeople.postValue(ApiResponse.empty("${e.message}", null))
             }
+
+            EspressoIdlingResource.idlingDecrement()
         }
 
         return resultDetailPeople

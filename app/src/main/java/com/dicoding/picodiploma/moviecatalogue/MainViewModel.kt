@@ -1,13 +1,12 @@
 package com.dicoding.picodiploma.moviecatalogue
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dicoding.picodiploma.moviecatalogue.data.source.MainRepository
 import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.movieentity.moviepopularentity.MoviePopularEntity
-import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.tvPopularEntity.TvPopularEntity
+import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.tvpopularentity.TvPopularEntity
 import com.dicoding.picodiploma.moviecatalogue.utils.Config
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,7 +48,6 @@ class MainViewModel(
 
     fun deleteMovieFavoriteById(movieId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.e(MainViewModel::class.java.simpleName, "Delete Movie Query")
             mainRepository.deleteMovieFavoriteById(movieId)
         }
     }

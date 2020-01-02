@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dicoding.picodiploma.moviecatalogue.MainViewModel
 import com.dicoding.picodiploma.moviecatalogue.R
-import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.tvPopularEntity.TvPopularEntity
+import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.tvpopularentity.TvPopularEntity
 import com.dicoding.picodiploma.moviecatalogue.ui.detailtvshow.DetailTvShowActivity
 import com.dicoding.picodiploma.moviecatalogue.ui.detailtvshow.DetailTvShowActivity.Companion.EXTRA_TV
 import com.dicoding.picodiploma.moviecatalogue.ui.search.SearchActivity
@@ -66,16 +66,16 @@ class TvShowFragment : Fragment(), MyAdapterClickListener<TvPopularEntity> {
         val tvSpinner = resources.getStringArray(R.array.spinner_tv)
         val spinnerAdapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, tvSpinner)
-        spinner.adapter = spinnerAdapter
-        spinner.setSelection(mainViewModel.tvSpinnerPosition)
+        tv_spinner.adapter = spinnerAdapter
+        tv_spinner.setSelection(mainViewModel.tvSpinnerPosition)
 
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        tv_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
 
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                mainViewModel.tvSpinnerPosition = spinner.selectedItemPosition
+                mainViewModel.tvSpinnerPosition = tv_spinner.selectedItemPosition
                 mainViewModel.setTvSpinner()
             }
         }

@@ -17,5 +17,6 @@ data class MovieDetailEntity(
     var status: String,
     var tagLine: String? = " - ",
     var title: String,
-    var voteAverage: Double
+    var voteAverage: Double,
+    var keyVideo: String?
 )

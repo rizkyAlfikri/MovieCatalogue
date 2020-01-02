@@ -2,9 +2,9 @@ package com.dicoding.picodiploma.moviecatalogue.data.source.local
 
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
-import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.movieentity.moviedetailentity.MovieDetailEntity
+import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.movieentity.MovieDetailWithInfoEntity
 import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.movieentity.moviepopularentity.MoviePopularEntity
-import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.tvPopularEntity.TvPopularEntity
+import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.tvshowentity.tvpopularentity.TvPopularEntity
 import com.dicoding.picodiploma.moviecatalogue.data.source.local.room.MovieDao
 import com.dicoding.picodiploma.moviecatalogue.data.source.local.room.TvShowDao
 
@@ -34,11 +34,6 @@ class LocalRepository private constructor(
 
     fun getAllMoviePopular() = movieDao.getAllMoviePopular()
 
-
-    fun insertListMoviePopular(listMoviePopular: List<MoviePopularEntity>) {
-        movieDao.insertListMoviePopular(listMoviePopular)
-    }
-
     fun getAllMovieFavorite(): DataSource.Factory<Int, MoviePopularEntity> {
         return movieDao.getAllMovieFavorite()
     }
@@ -54,7 +49,7 @@ class LocalRepository private constructor(
         movieDao.deleteMovieFavorite(moviePopularEntity)
     }
 
-    fun getMovieDetailById(id: Int): LiveData<MovieDetailEntity> {
+    fun getMovieDetailById(id: Int): LiveData<MovieDetailWithInfoEntity> {
         return movieDao.getMovieDetailById(id)
     }
 
@@ -66,13 +61,11 @@ class LocalRepository private constructor(
 
     fun getPopularTv() = tvShowDao.getPopularTv()
 
-    fun insertAllTvPopular(listTv: List<TvPopularEntity>) = tvShowDao.insertAllTvPopular(listTv)
-
     fun getAllTvShowFavorite() = tvShowDao.getAllTvShowFavorite()
 
     fun getTvDetailById(id: Int) = tvShowDao.getDetailTvById(id)
 
-    fun insertTvDetailFavorite(tvPopularEntity: TvPopularEntity) =
+    fun insertTvFavorite(tvPopularEntity: TvPopularEntity) =
         tvShowDao.insertTvFavorite(tvPopularEntity)
 
     fun deleteTvFavorite(tvPopularEntity: TvPopularEntity) =

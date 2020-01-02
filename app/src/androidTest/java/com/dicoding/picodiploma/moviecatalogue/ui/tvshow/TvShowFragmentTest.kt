@@ -3,9 +3,8 @@ package com.dicoding.picodiploma.moviecatalogue.ui.tvshow
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.*
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
@@ -59,10 +58,22 @@ class TvShowFragmentTest {
 
     @Test
     @OkReplay(tape = "instrumental_test_load_popular_tv_test", mode = TapeMode.READ_ONLY)
-    fun loadTvPopular() {
+    fun load_tv_and_click_spinner_for_sorting_tv() {
         onView(withId(R.id.navigation_tvshow)).check(matches(isDisplayed()))
         onView(withId(R.id.navigation_tvshow)).perform(click())
         onView(withId(R.id.rv_tvshow)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_tvshow)).check(RecyclerViewItemCountAssertion(20))
+
+        onView(withId(R.id.tv_spinner)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_spinner)).perform(click())
+        onView(withText("Top Rated Tv Shows")).check(matches(isDisplayed())).perform(click())
+        onView(withId(R.id.rv_tvshow)).check(RecyclerViewItemCountAssertion(20))
+
+        onView(withId(R.id.tv_spinner)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_spinner)).perform(click())
+        onView(withText("On The Air Tv Shows")).check(matches(isDisplayed())).perform(click())
+        onView(withId(R.id.rv_tvshow)).check(RecyclerViewItemCountAssertion(20))
+
+
     }
 }

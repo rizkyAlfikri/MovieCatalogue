@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.dicoding.picodiploma.moviecatalogue.MainViewModel
 import com.dicoding.picodiploma.moviecatalogue.data.source.MainRepository
-import com.dicoding.picodiploma.moviecatalogue.data.source.local.entity.peopleentity.PeopleDetailEntity
 import com.dicoding.picodiploma.moviecatalogue.di.Injection
 import com.dicoding.picodiploma.moviecatalogue.ui.detailmovie.DetailMovieViewModel
 import com.dicoding.picodiploma.moviecatalogue.ui.detailpeople.PeopleDetailViewModel

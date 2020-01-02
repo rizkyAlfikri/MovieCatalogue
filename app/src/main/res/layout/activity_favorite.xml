@@ -8,30 +8,30 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:background="@color/backgroundColor"
         android:layout_height="wrap_content"
+        android:background="@color/backgroundColor"
         android:theme="@style/AppTheme.NoActionBar">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:background="@color/backgroundColor"
-            android:textColor="@color/colorTextTertiary"
+            android:gravity="center"
             android:minHeight="?actionBarSize"
             android:padding="@dimen/appbar_padding"
             android:text="@string/favorite"
-            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
+            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+            android:textColor="@color/colorTextTertiary" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
-            android:backgroundTint="@color/backgroundColor"
             android:layout_width="match_parent"
-            app:tabIndicatorColor="@color/accentBackground"
-            app:tabTextColor="@color/colorTextTertiary"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary" />
+            android:background="?attr/colorPrimary"
+            android:backgroundTint="@color/backgroundColor"
+            app:tabIndicatorColor="@color/accentBackground"
+            app:tabTextColor="@color/colorTextTertiary" />
 
         <View
             android:id="@+id/view2"
@@ -41,12 +41,11 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
-        android:background="@color/backgroundColor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/backgroundColor"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 

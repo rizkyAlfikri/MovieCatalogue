@@ -26,7 +26,8 @@ data class TvDetailResult(
     @SerializedName("status")
     var status: String,
     @SerializedName("vote_average")
-    var voteAverage: Double
+    var voteAverage: Double,
+    var keyVideo: String? = null
 
 
 )
